@@ -1,5 +1,5 @@
 import { View, Button, Alert, StyleSheet } from 'react-native'
-import { useForm } from 'react-hook-form'
+import { Form, useForm } from 'react-hook-form'
 import { Datepicker, Select, Text, Input, SelectItem } from '@ui-kitten/components'
 
 import FormItem from '@/components/FormItem'
@@ -20,6 +20,7 @@ const defaultValues = {
 }
 
 const renderSelectItems = (options: { value: any, label: any, key: any }[]) => {
+  console.log('options', options);
   return options?.map(option => {
     const { value, label, key } = option;
     return <SelectItem key={key} title={label}></SelectItem>
@@ -62,7 +63,6 @@ export default function App() {
         style={{ marginBottom: 10 }}
       />
       <FormItem
-        required
         name="category"
         label="类别"
         control={control}
@@ -79,7 +79,6 @@ export default function App() {
       />
 
       <FormItem
-        required
         label="生产日期"
         control={control}
         name="productData"
@@ -94,13 +93,8 @@ export default function App() {
         )}
         style={{ marginBottom: 10 }}
       />
-      <Text
-        style={{
-          fontSize: 20,
-          marginBottom: 5,
-          fontWeight: '700',
-        }}
-      >
+
+      <Text style={styles.formItemTitle}>
         保质期
       </Text>
       <View style={{ flexDirection: 'row', }}>
@@ -110,11 +104,13 @@ export default function App() {
           name="shelfLife.years"
           errors={errors.shelfLife?.years}
           render={({ field: { onChange, value } }) => (
-            <View style={{ flexDirection: 'row', }}>
-              <Select style={{ flex: 1 }} onSelect={(selection: any) => {
-                onChange(YEARS_OPTIONS[selection.row].value)
-              }} value={value}>{renderSelectItems(YEARS_OPTIONS)}</Select><Input disabled>年</Input>
-            </View>
+            <Select
+              onSelect={(selection: any) => { onChange(YEARS_OPTIONS[selection.row].value) }}
+              placeholder="请选择"
+              value={value}
+              key="years"
+              accessoryRight={() => <Text>年</Text>}
+            >{renderSelectItems(YEARS_OPTIONS)}</Select>
           )}
           style={{ marginBottom: 10, flex: 1 }}
         />
@@ -124,11 +120,12 @@ export default function App() {
           name="shelfLife.months"
           errors={errors.shelfLife?.months}
           render={({ field: { onChange, value } }) => (
-            <View style={{ flexDirection: 'row', }}>
-              <Select style={{ flex: 1 }} onSelect={(selection: any) => {
-                onChange(MONTHS_OPTIONS[selection.row].value)
-              }} value={value}>{renderSelectItems(MONTHS_OPTIONS)}</Select><Input disabled>月</Input>
-            </View>
+            <Select
+              onSelect={(selection: any) => { onChange(MONTHS_OPTIONS[selection.row].value) }}
+              placeholder="请选择"
+              value={value}
+              accessoryRight={() => <Text>月</Text>}
+            >{renderSelectItems(MONTHS_OPTIONS)}</Select>
           )}
           style={{ marginBottom: 10, flex: 1 }}
         />
@@ -138,11 +135,11 @@ export default function App() {
           name="shelfLife.days"
           errors={errors.shelfLife?.days}
           render={({ field: { onChange, value } }) => (
-            <View style={{ flexDirection: 'row', }}>
-              <Select style={{ flex: 1 }} onSelect={(selection: any) => {
-                onChange(DAYS_OPTIONS[selection.row].value)
-              }} value={value}>{renderSelectItems(DAYS_OPTIONS)}</Select><Input disabled>天</Input>
-            </View>
+            <Select
+              onSelect={(selection: any) => { onChange(DAYS_OPTIONS[selection.row].value) }} value={value}
+              placeholder="请选择"
+              accessoryRight={() => <Text>天</Text>}
+            >{renderSelectItems(DAYS_OPTIONS)}</Select>
           )}
           style={{ marginBottom: 10, flex: 1 }}
         />
@@ -190,6 +187,11 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 30,
     fontSize: 50
+  },
+  formItemTitle: {
+    fontSize: 20,
+    marginBottom: 5,
+    fontWeight: '700',
   }
 })
 
